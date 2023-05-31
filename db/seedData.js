@@ -2,15 +2,22 @@
 // const { } = require('./');
 const client = require("./client");
 const { createUser } = require("./users");
+const { createActivity, getAllActivities } = require('./activities')
+const { createRoutine, getRoutinesWithoutActivities } = require('./routines')
 
 async function dropTables() {
   console.log("Dropping All Tables...");
-  // drop all tables, in the correct order
+  await client.query(`
+    DROP TABLE IF EXISTS routine_activities;
+    DROP TABLE IF EXISTS routines;
+    DROP TABLE IF EXISTS activities;
+    DROP TABLE IF EXISTS users;
+  `)
 }
 
 async function createTables() {
   // create all tables, in the correct order
-  try {
+  try {console.log("help");
     console.log("Starting to build tables...");
     await client.query(`
     CREATE TABLE users (
@@ -18,8 +25,20 @@ async function createTables() {
       username varchar(255) UNIQUE NOT NULL,
       password varchar(255) NOT NULL
     );
-    CREATE TABLE 
+    CREATE TABLE activities (
+      id SERIAL PRIMARY KEY,
+      name VARCHAR (255) UNIQUE NOT NULL,
+      description VARCHAR(255) NOT NULL
+    );
+    CREATE TABLE routines (
+      id SERIAL PRIMARY KEY,
+      "creatorId" INTEGER REFERENCES users(id),
+      "isPublic" BOOLEAN DEFAULT TRUE,
+      name VARCHAR(255) UNIQUE NOT NULL,
+      goal VARCHAR(255) NOT NULL
+    );
     `);
+    
   } catch (error) {}
 }
 
@@ -191,6 +210,7 @@ async function createInitialRoutineActivities() {
 
 async function rebuildDB() {
   try {
+    client.connect();
     await dropTables();
     await createTables();
     await createInitialUsers();
