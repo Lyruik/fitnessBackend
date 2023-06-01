@@ -1,20 +1,26 @@
-const client = require('./client');
+const client = require("./client");
 
 // database functions
 async function createActivity({ name, description }) {
   // return the new activity
+  try {
+    const activity = await client.query(
+      `
+      INSERT INTO activities (name, description) VALUES ($1, $2)
+      RETURNING *;
+    `,
+      [name, description]
+    );
+  } catch (error) {}
 }
 
 async function getAllActivities() {
   try {
     const activities = await client.query(`
-      SELECT * FROM actvities;
-    `)
-    console.log('how', activities.rows)
+      SELECT * FROM activities;
+    `);
     return activities.rows;
-  } catch (error) {
-    
-  }
+  } catch (error) {}
 }
 
 async function getActivityById(id) {}

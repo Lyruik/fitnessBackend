@@ -2,8 +2,9 @@
 // const { } = require('./');
 const client = require("./client");
 const { createUser } = require("./users");
-const { createActivity, getAllActivities } = require('./activities')
-const { createRoutine, getRoutinesWithoutActivities } = require('./routines')
+const { createActivity, getAllActivities } = require("./activities");
+const { createRoutine, getRoutinesWithoutActivities } = require("./routines");
+const { addActivityToRoutine } = require("./routine_activities");
 
 async function dropTables() {
   console.log("Dropping All Tables...");
@@ -12,12 +13,12 @@ async function dropTables() {
     DROP TABLE IF EXISTS routines;
     DROP TABLE IF EXISTS activities;
     DROP TABLE IF EXISTS users;
-  `)
+  `);
 }
 
 async function createTables() {
   // create all tables, in the correct order
-  try {console.log("help");
+  try {
     console.log("Starting to build tables...");
     await client.query(`
     CREATE TABLE users (
@@ -37,8 +38,14 @@ async function createTables() {
       name VARCHAR(255) UNIQUE NOT NULL,
       goal VARCHAR(255) NOT NULL
     );
+    CREATE TABLE routine_activities (
+      id SERIAL PRIMARY KEY,
+      "routineId" INTEGER REFERENCES routines(id),
+      "activityId" INTEGER REFERENCES activities(id),
+      count INTEGER NOT NULL DEFAULT 10,
+      duration INTEGER NOT NULL
+    )
     `);
-    
   } catch (error) {}
 }
 
