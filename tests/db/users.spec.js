@@ -67,7 +67,6 @@ describe("DB Users", () => {
       };
       await createUser(fakeUserData);
       const user = await getUser(fakeUserData);
-      console.log(user, "how strange");
       expect(user).toBeTruthy();
       expect(user.username).toBe(fakeUserData.username);
     });
