@@ -14,6 +14,7 @@ async function addActivityToRoutine({
     `,
       [routineId, activityId, count, duration]
     );
+    return routActivities.rows[0];
   } catch (error) {}
 }
 
