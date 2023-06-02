@@ -20,7 +20,6 @@ async function getAllActivities() {
     const activities = await client.query(`
       SELECT * FROM activities;
     `);
-    console.log(activities.rows, 'hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
     return activities.rows;
   } catch (error) {}
 }
