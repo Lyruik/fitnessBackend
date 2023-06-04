@@ -33,7 +33,8 @@ async function getAllRoutines() {
     r.id,
     r."isPublic", 
     r.goal,
-    STRING_AGG(CONCAT('{', '"id": ', a.id, ', ', '"name": "', a.name, '", ', '"count": ', ra.count, ', ', '"duration": ', ra.duration, '}'), '%') AS activities,
+    STRING_AGG(CONCAT('{', '"id": ', a.id, ', ', '"name": "', a.name, '", ', '"count": ', ra.count, ', ', '"duration": ', ra.duration, ', '
+    '"description": "', a.description, '", ', '"routineId": ', ra."routineId", ', ', '"routineActivityId": ', ra.id, '}'), '%') AS activities,
     r."creatorId"
     FROM routines r 
     JOIN routine_activities ra ON r.id=ra."routineId"
@@ -41,18 +42,17 @@ async function getAllRoutines() {
       JOIN users u ON u.id=r."creatorId"
        GROUP BY 1,2,3;
     `);
-    routineInfo.rows[0].activities = routineInfo.rows[0].activities.split("%");
-    // const newRow = await routineInfo.rows[0].activities.map((key) => {
-    //   console.log(typeof key, "who are u");
-    //   return JSON.parse(key);
-    // });
-    console.log(routineInfo.rows);
-    routineInfo.rows[0].activities = await routineInfo.rows[0].activities.map(
-      (key) => {
-        return JSON.parse(key);
-      }
-    );
-    console.log(routineInfo[0].activities, "that's not good");
+    for (let i = 0; i < routineInfo.rows.length; i++) {
+      routineInfo.rows[i].activities =
+        routineInfo.rows[i].activities.split("%");
+      routineInfo.rows[i].activities = await routineInfo.rows[i].activities.map(
+        (key) => {
+          console.log(key);
+          return JSON.parse(key);
+        }
+      );
+    }
+    // console.log(routineInfo.rows[0].activities[0]);
     return routineInfo.rows;
   } catch (error) {}
 }
