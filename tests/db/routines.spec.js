@@ -105,13 +105,13 @@ describe("DB Routines", () => {
     fakeRoutineActivity = fakeData.fakeRoutineActivities[0];
   });
 
-  // afterAll(async () => {
-  //   client.query(`
-  //       DELETE FROM routine_activities;
-  //       DELETE FROM routines;
-  //       DELETE FROM activities;
-  //     `);
-  // });
+  afterAll(async () => {
+    client.query(`
+        DELETE FROM routine_activities;
+        DELETE FROM routines;
+        DELETE FROM activities;
+      `);
+  });
 
   /****Before writing the functions for these tests, go to routine_activities.js
      and write the addActivityToRoutine function.****/
