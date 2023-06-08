@@ -222,12 +222,14 @@ async function updateRoutine({ id, ...fields }) {
 
 async function destroyRoutine(id) {
   try {
-    const deletedRoutine = await client.query(`
+    const deletedRoutine = await client.query(
+      `
     DELETE FROM routine_activities WHERE "routineId" = ($1);
     `,
       [id]
     );
-    const deletedRoutineActivity = await client.query(`
+    const deletedRoutineActivity = await client.query(
+      `
     DELETE FROM routines WHERE id = ($1);
     `,
       [id]

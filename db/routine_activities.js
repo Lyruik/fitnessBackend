@@ -103,6 +103,20 @@ async function canEditRoutineActivity(routineActivityId, userId) {
   } catch (error) {}
 }
 
+async function getRoutineNamefromRoutineActivityId(id) {
+  try {
+    const response = await client.query(
+      `
+      SELECT r.name FROM routines r
+        JOIN routine_activities ra ON r.id=ra."routineId"
+        WHERE ra."routineId" = ($1);
+    `,
+      [id]
+    );
+    return response.rows[0].name;
+  } catch (error) {}
+}
+
 module.exports = {
   getRoutineActivityById,
   addActivityToRoutine,
@@ -110,4 +124,5 @@ module.exports = {
   updateRoutineActivity,
   destroyRoutineActivity,
   canEditRoutineActivity,
+  getRoutineNamefromRoutineActivityId,
 };
