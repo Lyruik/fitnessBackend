@@ -13,7 +13,17 @@ async function createRoutine({ creatorId, isPublic, name, goal }) {
   } catch (error) {}
 }
 
-async function getRoutineById(id) {}
+async function getRoutineById(id) {
+  try {
+    const routine = await client.query(
+      `
+      SELECT * FROM routines WHERE id = ($1);
+    `,
+      [id]
+    );
+    return routine.rows[0];
+  } catch (error) {}
+}
 
 async function getRoutinesWithoutActivities() {
   try {

@@ -34,12 +34,13 @@ async function getRoutineActivitiesByRoutine({ id }) {
   try {
     const response = await client.query(
       `
-      SELECT a.id, a.name, a.description FROM routine_activities ra
+      SELECT ra.id AS id, a.name, a.description FROM routine_activities ra
       JOIN activities a ON a.id=ra."activityId"
       WHERE ra."routineId" = ($1);
     `,
       [id]
     );
+    console.log(response.rows);
     return response.rows;
   } catch (error) {}
 }
